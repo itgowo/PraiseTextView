@@ -23,7 +23,7 @@ QQ:1264957104
 
 ## 示例 ##
 ![](https://github.com/hnsugar/PraiseTextView/blob/master/pic1.jpg)
-![](https://github.com/hnsugar/CommentListTextView/blob/master/pic2.gif)
+![](https://github.com/hnsugar/PraiseTextView/blob/master/pic2.gif)
 
 ![](http://i.imgur.com/BDFkB82.png)
 
