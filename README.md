@@ -102,12 +102,11 @@ position是第几个点赞的人，mInfo是这条点赞的信息
 		mPraiseInfos.add (new PraiseTextView.PraiseInfo ().setId (777).setNickname ("李大").setLogo ("http://lujianchao.com/images/headimg/7.jpg"));
 		mPraiseInfos.add (new PraiseTextView.PraiseInfo ().setId (888).setNickname ("李二").setLogo ("http://lujianchao.com/images/headimg/8.jpg"));
 		mPraiseInfos.add (new PraiseTextView.PraiseInfo ().setId (999).setNickname ("李三").setLogo ("http://lujianchao.com/images/headimg/9.jpg"));
-		mPraiseTextView.setData (mPraiseInfos);
-		mPraiseTextView.setNameTextColor (Color.BLUE);
-		mPraiseTextView.setIcon (R.drawable.emoji_1f0cf);
-		mPraiseTextView.setMiddleStr ("，");
-		mPraiseTextView.setIconSize (new Rect (0,0,100,100));
-		mPraiseTextView.setonPraiseListener (new PraiseTextView.onPraiseClickListener () {
+		mPraiseTextView.setData (mPraiseInfos);//设置数据
+		mPraiseTextView.setNameTextColor (Color.BLUE);//设置名字字体颜色
+		mPraiseTextView.setIcon (R.drawable.emoji_1f0cf);//设置图标
+		mPraiseTextView.setMiddleStr ("，");//设置分割文本
+		mPraiseTextView.setIconSize (new Rect (0,0,100,100));//设置图标大小，默认与字号匹配mPraiseTextView.setonPraiseListener (new PraiseTextView.onPraiseClickListener () {
 		    @Override
 		    public void onClick (final int position, final PraiseTextView.PraiseInfo mPraiseInfo) {
 		       mTextView.append ("position = [" + position + "], mPraiseInfo = [" + mPraiseInfo + "]"+"\r\n");
