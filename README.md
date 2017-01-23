@@ -1,122 +1,145 @@
-# 长连接服务器技术说明
-## 一： socket发送数据协议：
-
-协议头 | 校验 | 协议标识 | 数据类型 | 数据内容
----|---|---|---|---|---
-4 Byte | 8 Byte | 64 Byte | 4 Byte | n Byte
- 0 - 4 | 5 - 12 | 13 - 76 | 77 - 80 | 81 -n
-   
- 
-  
- 
-序号 | 名称 | 类型 | 长度 | 说明
----|---|---|---|---
-1 | 协议头 | 整数型 | 4 | 0-255 请求类型
-2 | 校验 | 长整数型 | 8 | 默认为socket数据长度
-3 | 协议标识 | 文本型 | 64 | 协议传输标识
-4 | 数据类型 | 整数型 | 4 | 1-255 携带数据类型
-5 | 数据内容 | 文本型 | n | 协议携带待处理数据
-6 | 客户信息 | 文本型 | 20000 | Socket连接客户端信息
- 
-协议头：4字节    整数
-
-校验：8字节    长整数
-
-协议标识：64字节  文本
-
-数据类型：   4字节  整数型 1-255
-
-数据内容：无限
+# CommentListTextView #
  
 
+## 说明
 
-.程序集 Socket数据包, , 公开, 对socket接收数据进行拆包
-.程序集变量 协议头, 整数型, , , 4Byte
-.程序集变量 校验, 长整数型, , , 8Byte
-.程序集变量 协议标识, 文本型, , , 64Byte
-.程序集变量 数据类型, 整数型, , , 4Byte
-.程序集变量 数据内容, 文本型, , , nByte
-.程序集变量 客户信息, 文本型
+#### 我是将朋友圈分成了几个独立模块单独自定义的View，通过回调完成交互，耦合性算是非常低了，主要有以下及部分： 
 
- 
- 
-####   1.协议头
+1.评论布局（自定义TextView）
 
- 
-    .常量 心跳连接, "0", , 保持socket不自动断开
-    .常量 断开连接, "1", , 主动请求断开服务器，让服务器处理相应事务
-    .常量 请求服务, "2", , 获取设备列表、其他数据请求（暂时）
-    .常量 数据传送, "3", , IM推送等
-    .常量 请求标识ID, "4", , 获得唯一标识义工使用
-    .常量 得到标识ID, "5", , 获得服务器分配的标识
-    .常量 请求终端列表, "21", , 获得当前服务器已连接设备
-    .常量 请求终端列表反馈, "22"
-    .常量 请求断开终端, "23", , 根据标识断开某一设备连接，需要权限（暂时测试使用）
-    .常量 请求断开终端反馈, "24", , 数据类型1 成功 2失败 （暂时测试使用）
+[CommentListTextView](https://github.com/hnsugar/CommentListTextView/)
 
+[Lu_PingLunLayout](https://github.com/hnsugar/lu_pinglunlayout/)
 
-#### 2.协议详细
+2.点赞布局（原理和评论的自定义TextView一样，都是用的SpannableString）
 
+3.图片列表（出门右转，理论上没有数量限制，和listView配合使用也很好，缓存也自己处理了）
 
-```
-心跳连接 3s-100s,当服务器压力大时自动释放未主动发送数据客户端
-协议头 ：协议头
-校验 ：暂时为socket数据长度
-协议标识 ：设备标识，登陆服务器会获得，请求标识不推荐，测试用
-数据类型 ：作为反馈信息时默认1为成功2为失败3待定，作为数据请求传输时取值范围为11-255，保留十个数，不能设0，为了规避特殊原因0被屏蔽，使用0将无法传输数据。
-数据内容  ：文本类json或xml，客户端和服务端要一至
-客户信息  ：服务器存储信息，方便管理
-```
+[MultiImageViewLayout](https://github.com/hnsugar/MultiImageViewLayout/)
 
+我也是找第三方例子不好找，于是自己写了一个，我和同事还打算做一套IM系统，app和后台都要做，我们自己定义sdk，我们还要封装H5，类似hbuilder如果有什么问题，可以联系我，
 
+QQ:1264957104
 
-## 二：客户端连接池
-数据类型 ：ServerClient
- 
-序号 | 名称 | 类型 | 说明
----|---|---|---
-1 | IP | 文本型 |客户端连接地址
-2 | Flag | 文本型 | 协议传输标识
-3 | Type | 整数型 | 1-255 携带数据类型,IM,push,其他
-4 | LastTime | 日期时间型 | 当连接池过大，自动关闭较久未使用连接
-5 | Tag | 文本型 | 扩展
+## 示例 ##
+![](https://github.com/hnsugar/CommentListTextView/blob/master/pic1.jpg)
+![](https://github.com/hnsugar/CommentListTextView/blob/master/pic2.gif)
 
-    .   
-    .成员 , 文本型, , , 127.0.0.1:8080
-    .成员 , 文本型, , , 标识符
-    .成员 , 整数型, , , 
-    .成员 , 日期时间型   
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 三： 连接池模块：
+![](http://i.imgur.com/BDFkB82.png)
 
  
-ServerFunction
+
+## onNickNameClick (int position, CommentListTextView.CommentInfo mInfo)  ##
+“A回复B”中A名称被点击
+position是第几条评论，mInfo是这条评论的信息
+
+## onToNickNameClick (int position, CommentListTextView.CommentInfo mInfo) ##
+“A回复B”中B名称被点击
+position是第几条评论，mInfo是这条评论的信息
+
+## onCommentItemClick (int position, CommentListTextView.CommentInfo mInfo)  ##
+position是第几条评论，mInfo是这条评论的信息
+
+## onOtherClick ##
+内部处理了点击文字会触发两个回调的问题，这个是点击非文字或者没有单独定义点击事件的回调
+
+ 
+
+
+
+
+## 布局 ##
+ 
+	<?xml version="1.0" encoding="utf-8"?>
+		<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:id="@+id/activity_main"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		tools:context="com.lujianchao.commentlisttextview.commentlisttextview.MainActivity">
+
+		<com.lujianchao.commentlisttextview.commentlisttextview.CommentListTextView
+			android:id="@+id/commentlist"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="15sp"/>
+
+		<TextView
+			android:id="@+id/log"
+			android:layout_width="match_parent"
+			android:scrollbars="vertical"
+			android:layout_height="match_parent"/>
+	</LinearLayout>
+
+
+
+
+## 代码 ##
     
-设置信息
+	public class MainActivity extends AppCompatActivity {
+		private CommentListTextView mCommentListTextView;
+		private TextView mTextView;
 
-创建ServerClient
+		@Override
+		protected void onCreate (Bundle savedInstanceState) {
+			super.onCreate (savedInstanceState);
+			setContentView (R.layout.activity_main);
+			mCommentListTextView = (CommentListTextView) findViewById (R.id.commentlist);
+			mTextView = (TextView) findViewById (R.id.log);
+			test ();
+		}
 
-获取信息
-
-删除ServerClient
-
-获取ServerClient
-
-获取Client列表, 文本型 
-
-获取Client数量, 整数型
+		private void test () {
+			mTextView.setMovementMethod (ScrollingMovementMethod.getInstance ());
 
 
- 
+			mCommentListTextView.setMaxlines (6);
+			mCommentListTextView.setMoreStr ("查看更多");
+			mCommentListTextView.setNameColor (Color.parseColor ("#fe671e"));
+			mCommentListTextView.setCommentColor (Color.parseColor ("#242424"));
+			mCommentListTextView.setTalkStr ("回复");
+			mCommentListTextView.setTalkColor (Color.parseColor ("#242424"));
+
+
+			List<CommentListTextView.CommentInfo> mCommentInfos = new ArrayList<> ();
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (1111).setComment ("今天天气真好啊！11").setNickname ("张三").setTonickname ("赵四"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (2222).setComment ("今天天气真好啊！22").setNickname ("赵四"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (3333).setComment ("今天天气真好啊！33").setNickname ("王五").setTonickname ("小三"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (4444).setComment ("今天天气真好啊！44").setNickname ("小三").setTonickname ("王五"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (5555).setComment ("今天天气真好啊！55").setNickname ("李大"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (6666).setComment ("今天天气真好啊！66").setNickname ("小三").setTonickname ("王五"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (7777).setComment ("今天天气真好啊！77").setNickname ("李大").setTonickname ("张三"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (8888).setComment ("今天天气真好啊！88").setNickname ("小三").setTonickname ("王五"));
+			mCommentInfos.add (new CommentListTextView.CommentInfo ().setID (9999).setComment ("今天天气真好啊！99").setNickname ("李大").setTonickname ("张三"));
+			mCommentListTextView.setData (mCommentInfos);
+			mCommentListTextView.setonCommentListener (new CommentListTextView.onCommentListener () {
+
+
+				@Override
+				public void onNickNameClick (final int position, final CommentListTextView.CommentInfo mInfo) {
+					mTextView.append ("onNickNameClick  position = [" + position + "], mInfo = [" + mInfo + "]" + "\r\n");
+				}
+
+				@Override
+				public void onToNickNameClick (final int position, final CommentListTextView.CommentInfo mInfo) {
+					mTextView.append ("onToNickNameClick  position = [" + position + "], mInfo = [" + mInfo + "]" + "\r\n");
+				}
+
+				@Override
+				public void onCommentItemClick (final int position, final CommentListTextView.CommentInfo mInfo) {
+					mTextView.append ("onCommentItemClick  position = [" + position + "], mInfo = [" + mInfo + "]" + "\r\n");
+				}
+
+				@Override
+				public void onOtherClick () {
+					mTextView.append ("onOtherClick" + "\r\n");
+				}
+			});
+		}
+	}
