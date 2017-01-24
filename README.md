@@ -20,8 +20,11 @@
 我也是找第三方例子不好找，于是自己写了一个，我和同事还打算做一套IM系统，app和后台都要做，我们自己定义sdk，我们还要封装H5，类似hbuilder如果有什么问题，可以联系我，
 
 QQ:1264957104
+
 CSDN:http://blog.csdn.net/hnsugar
+
 GitHub:https://github.com/hnsugar
+
 链接是跳转到GitHub的，部分文章我会直接贴出关键View的代码。
 
 ## 示例 ##
